@@ -1,17 +1,16 @@
-# React Class Helper [![npm version](https://badge.fury.io/js/react-class-helper.svg)](http://badge.fury.io/js/react-class-helper)
+# Coffeescript React Class [![npm version](https://badge.fury.io/js/coffee-react-class.svg)](http://badge.fury.io/js/react-class-helper)
 
-> Helper for ES6 class with React (autobind, mixins, ...)
-
+> React component as a coffee-script class (autobind, mixins, ...)
 
 ## Installation
 
-`npm install react-class-helper`
+`npm install coffee-react-class`
 
-To see how to use ES6 class with React, please check this [post](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#es6-classes)
+To see how to use Coffeescript class with React, please check this [post](http://facebook.github.io/react/blog/2015/01/27/react-v0.13.0-beta-1.html#es6-classes)
 
 
 ## Usage
-This library provides two elements: `Component` and `Mixins`. They can be used together or separately.
+This package provides two elements: `Component` and `mixins`. They can be used together or separately.
 
 
 ### Component
@@ -25,57 +24,47 @@ This library provides two elements: `Component` and `Mixins`. They can be used t
 <br>
 So it means that currently you have to do this:
 
-```js
-import React from 'react';
+```coffee
+React = require 'react'
 
-class MyButton extends React.Component {
-  constructor(props) {
-    super(props);
+class ButtonComponent extends React.Component
 
-    // Explicitly prebind methods in your constructor
-    this.onClick = this.onClick.bind(this);
-  }
+  constructor: (props) ->
+    super props
 
-  onClick() {
-    // If not prebind, this === window (global object in browser)
-    this.setState({ clicked: true });
-  }
+    # comes from fat arrow.
+    # @onClick = @onClick.bind this
 
-  render() {
-    return (
-      <button onClick={this.onClick}>My button</button>
-    );
-  }
-}
+  # notice the fat arrow here.
+  # render shouldn't have fat arrow etc.
+  # it's just confusing.
+  onClick: => @setState clicked: yes
+
+  render: -> <button onClick={@onClick}>My button</button>
+
 ```
 
 <br>
 With your component extending `Component` class, you can do this:
 
-```js
-// Note, I left React module because the JSX tags are transformed
-// to `React.createElement` so we still need to import this module
-import React from 'react';
-import { Component } from 'react-class-helper';
+```coffee
+# Note, I left React module because the JSX tags are transformed
+# to `React.createElement` so we still need to import this module
+React = require 'react'
+{ Component } = require 'coffee-react-class'
 
-// Extending `Component` instead of `React.Component`
+# Extending `Component` instead of `React.Component`
 class MyButton extends Component {
-  constructor(props) {
-    super(props);
-    // Use `super(props, false);` to not autobind
-    // Or `this.bind(['onClick']);` to bind only some methods
-  }
+  constructor: (props) ->
+    super props
+    # Use `super(props, false);` to not autobind
+    # Or `this.bind(['onClick']);` to bind only some methods
 
-  onClick() {
-    // Automatically bind to class instance
-    this.setState({ clicked: true });
-  }
+  # no fat arrow, or explicit binding.
+  # Automatically bind to class instance
+  onClick: -> @setState clicked: yes
 
-  render() {
-    return (
-      <button onClick={this.onClick}>My button</button>
-    );
-  }
+  render: -> <button onClick={this.onClick}>My button</button>
 }
 ```
 
@@ -87,10 +76,10 @@ class MyButton extends Component {
 
 > There is no standard and universal way to define mixins in JavaScript. In fact, several features to support mixins were dropped from ES6 today. There are a lot of libraries with different semantics. We think that there should be one way of defining mixins that you can use for any JavaScript class. React just making another doesn't help that effort.
 
-But if you still want to use mixins with ES6 class. See below how.
+But if you still want to use mixins with Coffeescript classes. See below how.
 
 <br/>
-`Mixins(componentClass, mixins = [], options = {})`
+`mixins(componentClass, mixins = [], options = {})`
 
 - `componentClass`  Component factory (not class instance).
 - `mixins`          Array of mixin objects.
@@ -98,11 +87,10 @@ But if you still want to use mixins with ES6 class. See below how.
   - `defaultRule`   Default rule to apply to property not defined in `rules`  
   - `rules`         Map mixin properties to rules
 
-```js
-// This is the default options
+```coffee
 {
   rules: {
-    // Lifecycle methods
+    # Lifecycle methods
     componentWillMount:        Mixins.MANY,
     componentDidMount:         Mixins.MANY,
     componentWillReceiveProps: Mixins.MANY,
@@ -111,7 +99,7 @@ But if you still want to use mixins with ES6 class. See below how.
     componentDidUpdate:        Mixins.MANY,
     componentWillUnmount:      Mixins.MANY,
 
-    // Compatibility hack
+    # Compatibility hack
     getDefaultProps:           Mixins.MANY_MERGED,
     getInitialState:           Mixins.MANY_MERGED
   },
@@ -129,110 +117,62 @@ Built-in rules
 <br/>
 Example:
 
-```js
-import React from 'react';
-import { Component, Mixins } from 'react-class-helper';
+```coffee
+React = require 'react'
+{ Component, mixins } = require 'coffee-react-class'
 
 // Define component
-class MyButton extends Component {
-  constructor(props) {
-    super(props);
+class MyButton extends Component
 
-    // `Component` class set `this.state` from `_getInitialState()` automatically
-    // If you use the built-in `React.Component` you have to call it explicitly
-    //
-    // this.state = Object.assign({}, this._getInitialState());
+  constructor: (props) ->
+    super props
+    # `Component` class set `@state` from `_getInitialState()` automatically
+    # If you use the built-in `React.Component` you have to call it explicitly
+    # @state = _.assign({}, @_getInitialState());
   }
 
-  // If you use the built-in `React.Component` you must declare
-  // this method explicitly
-  //
-  // _getInitialState() {
-  //   return {};
-  // }
+  # If you use the built-in `React.Component` you must declare
+  # this method explicitly
+  #
+  # _getInitialState() {
+  #   return {};
+  # }
 
-  onClick() {
-    this.setState({ clicked: true });
-  }
+  onClick: -> @setState clicked: yes
 
-  componentDidMount() {
-    console.log('called `componentDidMount` from MyButton');
-  }
+  componentDidMount: -> console.log 'called `componentDidMount` from MyButton'
 
-  render() {
-    return (
-      <button onClick={this.onClick}>My button</button>
-    );
-  }
-}
+  render: -> <button onClick={this.onClick}>My button</button>
 
-// Define some mixins
-var myMixin1 = {
-  componentDidMount() {
-    console.log('called `componentDidMount` from Mixin1');
-  }
-};
+# Define some mixins
+myMixin1 =
+  componentDidMount: -> console.log 'called `componentDidMount` from Mixin1'
 
-var myMixin2 = {
-  componentDidMount() {
-    console.log('called `componentDidMount` from Mixin2');
-  },
+myMixin1 =
+  componentDidMount: -> console.log 'called `componentDidMount` from Mixin2'
 
-  // Objects are ignored except 'statics' and 'propTypes'
-  someObject: {}, // Ignore
+  # Objects are ignored except 'statics' and 'propTypes'
+  # Ignore
+  someObject: {} 
 
-  propTypes: { // Merge into `MyButton.propTypes`
+  # Merge into `MyButton.propTypes`
+  propTypes:
     myProp: React.PropTypes.string
-  },
 
-  statics: { // Merge into `MyButton`
+  # Merge into `MyButton`
+  statics: 
     queries: {}
-  },
 
-  getDefaultProps() { // Merge into `MyButton.defaultProps`
-    return { myProp: 'myProp' };
-  },
+  # Merge into `MyButton.defaultProps`
+  getDefaultProps: -> { myProp: 'myProp' }
 
-  getInitialState() { // Rename to `_getInitialState` to avoid React's warning
-                      // Call in component constructor and merge result
-    return { myState: 'myState'};
-  },
+  # Rename to `_getInitialState` to avoid React's warning
+  # Call in component constructor and merge result
+  getInitialState: -> { myState: 'myState'}
 
-  shouldComponentUpdate() { // Throw error if defined in other mixin
-    return true;
-  }
-};
+  # Throw error if defined in other mixin
+  shouldComponentUpdate: -> yes
 
-// Set mixins to component
-Mixins(MyButton, [myMixins1, myMixin2]);
+# Set mixins to component
+mixins(MyButton, [myMixins1, myMixin2]);
 ```
-
-## Support
-If you have any problem or suggestion please open an issue [here](https://github.com/SimonDegraeve/react-class-helper/issues).
-
-## License MIT
-
-The MIT License
-
-Copyright 2015, Simon Degraeve
-
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
