@@ -1,7 +1,7 @@
 {
   "name": "react-class-helper",
-  "description": "React component done right for coffee-script (autobind, mixins, ...)",
-  "version": "0.0.0",
+  "description": "React component as a coffee-script class (autobind, mixins, ...)",
+  "version": "0.1.0",
   "homepage": "https://github.com/usirin/coffee-react-class",
   "author": "Umut Sirin <umutsirin1@gmail.com>",
   "repository": {
