@@ -1,29 +1,26 @@
 {
   "name": "react-class-helper",
-  "description": "Helper for ES6 class with React (autobind, mixins, ...)",
-  "version": "0.1.2",
-  "homepage": "https://github.com/SimonDegraeve/react-class-helper",
-  "author": "Simon Degraeve <simon.degraeve@gmail.com>",
+  "description": "React component done right for coffee-script (autobind, mixins, ...)",
+  "version": "0.0.0",
+  "homepage": "https://github.com/usirin/coffee-react-class",
+  "author": "Umut Sirin <umutsirin1@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git://github.com/SimonDegraeve/react-class-helper.git"
+    "url": "git://github.com/usirin/coffee-react-class.git"
   },
   "bugs": {
-    "url": "https://github.com/SimonDegraeve/react-class-helper/issues"
+    "url": "https://github.com/usirin/coffee-react-class/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/SimonDegraeve/react-class-helper/blob/master/licence"
+      "url": "https://github.com/usirin/coffee-react-class/blob/master/licence"
     }
   ],
-  "main": "dist/index.js",
-  "engines": {
-    "node": ">= 0.10.x"
-  },
+  "main": "lib/index.js",
   "scripts": {
-    "build": "6to5 -d ./dist ./lib",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "coffee --bare --compile --output lib/ src/",
+    "test": "node ./node_modules/jest-cli/bin/jest.js"
   },
   "dependencies": {},
   "peerDependencies": {
@@ -31,12 +28,31 @@
   },
   "keywords": [
     "react",
-    "es6",
+    "coffee",
+    "coffeescript",
+    "coffee-script",
     "class",
     "mixin",
     "mixins"
   ],
+  "directories": {
+    "test": "jest"
+  },
+  "jest": {
+    "testDirectoryName": "test",
+    "scriptPreprocessor": "./node_modules/jest-utils/lib/preprocessors/coffee-react.js",
+    "moduleFileExtensions": [
+      "coffee",
+      "js"
+    ],
+    "testFileExtensions": [
+      "coffee",
+      "js"
+    ]
+  },
   "devDependencies": {
-    "6to5": "^3.3.12"
+    "coffee-script": "^1.9.0",
+    "jest-cli": "^0.2.2",
+    "jest-utils": "0.0.1"
   }
 }
