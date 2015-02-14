@@ -1,8 +1,8 @@
 jest.autoMockOff()
 
 React = require 'react/addons'
-Component = require '../src/component'
-mixins = require '../src/mixins.coffee'
+
+{ Component, mixins } = require '../src'
 
 { TestUtils } = React.addons
 describe 'Component', ->
@@ -35,8 +35,6 @@ describe 'mixins', ->
     obj = {}
     foo = TestUtils.renderIntoDocument \
       <FooComponent value='bar' test={obj} />
-
-    console.log {test}
 
     expect(test['component']).toBe yes
     expect(test['fooMixin']).toBe yes
