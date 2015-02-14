@@ -22,7 +22,9 @@
     "build": "coffee --bare --compile --output lib/ src/",
     "test": "node ./node_modules/jest-cli/bin/jest.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash.assign": "^3.0.0"
+  },
   "peerDependencies": {
     "react": "^0.13.0-beta.1"
   },
