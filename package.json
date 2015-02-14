@@ -1,5 +1,5 @@
 {
-  "name": "react-class-helper",
+  "name": "coffee-react-class",
   "description": "React component as a coffee-script class (autobind, mixins, ...)",
   "version": "0.1.0",
   "homepage": "https://github.com/usirin/coffee-react-class",
