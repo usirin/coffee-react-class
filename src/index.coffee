@@ -1,4 +1,4 @@
 Component = require './component'
 mixins = require './mixins'
 
-module.exports = { Component, mixin }
+module.exports = { Component, mixins }
